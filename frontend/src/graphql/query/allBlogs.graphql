@@ -1,0 +1,30 @@
+query getAllblogs {
+  article {
+    id
+    title
+    text
+    user {
+      id
+      firstName
+      lastName
+      email
+    }
+    comments {
+      id
+      comment
+    }
+    category {
+      id
+      name
+    }
+    likeCount
+    imageURL
+    likes {
+      user {
+        id
+        firstName
+        lastName
+      }
+    }
+  }
+}

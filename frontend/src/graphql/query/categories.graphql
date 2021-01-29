@@ -1,0 +1,20 @@
+query getCategories {
+  categories {
+    id
+    name
+    blogs {
+      id
+      text
+      title
+      likeCount
+      user {
+        id
+        firstName
+      }
+    }
+    user {
+      id
+      firstName
+    }
+  }
+}

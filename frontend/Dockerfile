@@ -1,0 +1,12 @@
+# Frontend
+FROM node:14.11.0
+ENV FRONT_PORT /frontend
+ENV DOCKERIZE_VERSION v0.6.1
+MAINTAINER Yokoyama Naoki
+RUN mkdir $FRONT_PORT
+WORKDIR $FRONT_PORT
+ADD . $FRONT_PORT
+
+RUN npm install
+EXPOSE 3000
+CMD ["npm","run","dev"]

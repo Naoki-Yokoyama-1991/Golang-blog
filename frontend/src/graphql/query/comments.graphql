@@ -1,0 +1,12 @@
+query getComments($blogID: ID!) {
+  comments(blogID: $blogID, limit: 100, offset: 0) {
+    __typename
+    id
+    comment
+    createdAt
+    user {
+      id
+      firstName
+    }
+  }
+}

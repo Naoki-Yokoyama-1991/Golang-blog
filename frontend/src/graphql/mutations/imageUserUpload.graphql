@@ -1,0 +1,5 @@
+mutation ProfileImageCreate($image: Upload!) {
+  newProfileImage(image: $image) {
+    id
+  }
+}

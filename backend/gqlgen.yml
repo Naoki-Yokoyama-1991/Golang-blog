@@ -1,0 +1,93 @@
+# Where are all the schema files located? globs are supported eg  src/**/*.graphqls
+schema:
+  - graph/graphql/schema/*.graphqls
+
+# Where should the generated server code go?
+exec:
+  filename: graph/generated/generated.go
+  package: generated
+
+# Uncomment to enable federation
+# federation:
+#   filename: graph/generated/federation.go
+#   package: generated
+
+# Where should any generated models go?
+model:
+  filename: graph/models/models_gen.go
+  package: models
+models:
+  Blog:
+    model: github.com/yoko/blog/graph/models.Blog
+    fields:
+      user:
+        resolver: true
+      comment:
+        resolver: true
+      category:
+        resolver: true
+
+  User:
+    model: github.com/yoko/blog/graph/models.User
+    fields:
+      blogs:
+        resolver: true
+  Comment:
+    model: github.com/yoko/blog/graph/models.Comment
+    fields:
+      blog:
+        resolver: true
+      user:
+        resolver: true
+  Category:
+    model: github.com/yoko/blog/graph/models.Category
+    fields:
+      blogs:
+        resolver: true
+      user:
+        resolver: true
+  Like:
+    model: github.com/yoko/blog/graph/models.Like
+  Password:
+    model: github.com/yoko/blog/graph/models.PasswordReset
+  Image:
+    model: github.com/yoko/blog/graph/models.Image
+    fields:
+
+
+# Where should the resolver implementations go?
+resolver:
+  layout: follow-schema
+  dir: graph/graphql/resolver
+  package: resolver
+
+# Optional: turn on use `gqlgen:"fieldName"` tags in your models
+# struct_tag: json
+
+# Optional: turn on to use []Thing instead of []*Thing
+# omit_slice_element_pointers: false
+
+# Optional: set to speed up generation time by not performing a final validation pass.
+# skip_validation: true
+
+# gqlgen will search for any type names in the schema in these go packages
+# if they match it will use them, otherwise it will generate them.
+autobind:
+  - "github.com/yoko/blog/graph/models"
+# This section declares type mapping between the GraphQL and go type systems
+#
+# The first line in each type will be used as defaults for resolver arguments and
+# modelgen, the others will be allowed when binding to fields. Configure them to
+# your liking
+# models:
+#   ID:
+#     models:
+#       - github.com/99designs/gqlgen/graphql.ID
+#       - github.com/99designs/gqlgen/graphql.Int
+#       - github.com/99designs/gqlgen/graphql.Int64
+#       - github.com/99designs/gqlgen/graphql.Int32
+#   Int:
+#     models:
+#       - github.com/99designs/gqlgen/graphql.Int
+#       - github.com/99designs/gqlgen/graphql.Int64
+#       - github.com/99designs/gqlgen/graphql.Int32

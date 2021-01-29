@@ -1,0 +1,36 @@
+query getBlog($blogID: ID!) {
+  blog(blogID: $blogID) {
+    __typename
+    id
+    title
+    createdAt
+    text
+    user {
+      __typename
+      id
+      firstName
+      lastName
+      email
+    }
+    comments {
+      __typename
+
+      id
+      comment
+    }
+    category {
+      __typename
+
+      id
+      name
+    }
+    likeCount
+    imageURL
+    likes {
+      __typename
+      user {
+        id
+      }
+    }
+  }
+}

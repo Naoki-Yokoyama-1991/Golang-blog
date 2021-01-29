@@ -1,0 +1,20 @@
+mutation createBlog(
+  $title: String!
+  $text: String!
+  $categoryId: String!
+  $image: Upload!
+) {
+  createBlog(
+    input: {
+      title: $title
+      text: $text
+      categoryId: $categoryId
+      image: $image
+    }
+  ) {
+    id
+    title
+    text
+    imageURL
+  }
+}

@@ -1,0 +1,3 @@
+query ImageGetBlog($id: ID!) {
+  imageblog(id: $id)
+}

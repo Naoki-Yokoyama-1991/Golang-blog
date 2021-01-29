@@ -1,0 +1,33 @@
+query getBlogList {
+  article {
+    __typename
+    id
+    title
+    text
+    user {
+      __typename
+      id
+      firstName
+      lastName
+      email
+    }
+    comments {
+      __typename
+      id
+      comment
+    }
+    category {
+      __typename
+      id
+      name
+    }
+    likeCount
+    imageURL
+    likes {
+      __typename
+      user {
+        id
+      }
+    }
+  }
+}

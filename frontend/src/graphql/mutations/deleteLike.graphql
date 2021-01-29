@@ -1,0 +1,3 @@
+mutation deleteLike($blogID: ID!) {
+  putUnLike(blogID: $blogID)
+}

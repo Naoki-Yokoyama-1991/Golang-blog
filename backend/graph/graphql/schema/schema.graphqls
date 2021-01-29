@@ -1,0 +1,301 @@
+scalar Time
+scalar Cursor
+scalar Upload
+
+type AuthResponse {
+  token: String!
+  user: User!
+}
+
+type User {
+  id: ID!
+  email: String!
+  profileImage: Image!
+  firstName: String!
+  lastName: String!
+  blogs: [Blog!]!
+  likes: [Like!]!
+  role: String!
+  active: Boolean!
+  createdAt: Time!
+  updatedAt: Time!
+}
+
+type Category {
+  id: ID!
+  user: User!
+  blogs: [Blog!]!
+  name: String!
+  createdAt: Time!
+  updatedAt: Time!
+}
+
+type Blog implements Node {
+  id: ID!
+  user: User!
+  blogImage: [Image!]!
+  title: String!
+  text: String!
+  comments: [Comment!]!
+  likes: [Like!]!
+  likeCount: Int!
+  createdAt: String!
+  updatedAt: Time
+  category: Category!
+  imageURL: String!
+}
+
+type Comment {
+  id: ID!
+  user: User!
+  blog: Blog!
+  comment: String!
+  createdAt: String!
+}
+
+type Like {
+  id: ID!
+  user: User!
+  blog: Blog!
+}
+
+type Image {
+  id: ID!
+  userID: ID!
+  blogID: ID!
+  name: String!
+}
+
+# ========== Input ==========
+input ResetPassword {
+  password: String!
+  confirmPassword: String!
+}
+
+input RegisterInput {
+  email: String!
+  password: String!
+  confirmPassword: String!
+  firstName: String!
+  lastName: String!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+input UpdateUser {
+  firstName: String!
+  lastName: String!
+  email: String!
+}
+
+input NewBlog {
+  image: Upload
+  title: String!
+  text: String!
+  categoryId: String!
+}
+
+input UpdateBlog {
+  image: Upload
+  title: String
+  text: String
+  categoryId: String!
+}
+
+input BlogFilter {
+  title: String
+}
+
+input NewComment {
+  comment: String!
+}
+
+input CategoryInput {
+  name: String!
+}
+
+input ImageDelete {
+  name: String!
+}
+
+# ========== Query ==========
+type Query {
+  #Blog
+  article: [Blog!]!
+  blog(blogID: ID!): Blog!
+  blogs(filter: BlogFilter, limit: Int = 10, offset: Int = 0): [Blog!]!
+
+  #Comment
+  comments(blogID: ID!, limit: Int = 10, offset: Int = 0): [Comment!]!
+
+  #User
+  user(id: ID!): User!
+  userProfile: User!
+  userAll: [User!]!
+
+  #Category
+  categories: [Category!]!
+  category(categoryID: ID!): Category
+  categoriesList(categoryID: ID!): [Blog!]!
+
+  #Page
+  blogConnection(
+    # 文字列フィルタ条件
+    filterWord: TextFilterCondition
+    # ページング条件
+    pageCondition: PageCondition
+    # 並び替え条件
+    edgeOrder: EdgeOrder
+  ): BlogConnection
+
+  #ImageUser
+  imageUser: String!
+  imageblog(id: ID!): String!
+}
+
+# ========== Mutation ==========
+type Mutation {
+  #Category
+  createCategory(input: CategoryInput!): Category
+  updateCategory(id: ID!, input: CategoryInput): Category!
+  deleteCategory(id: ID!): Boolean!
+
+  #User
+  register(input: RegisterInput!): AuthResponse!
+  login(input: LoginInput!): AuthResponse!
+  logout: AuthResponse!
+  updateUser(input: UpdateUser!): User!
+  deleteUser: Boolean!
+  newProfileImage(image: Upload!): Image!
+
+  #image
+  deleteImage: Boolean!
+
+  #Blog
+  createBlog(input: NewBlog!): Blog!
+  updateBlog(id: ID!, input: UpdateBlog!): Blog!
+  deleteBlog(id: ID!): Boolean!
+
+  #Comment
+  createComment(blogID: ID!, input: NewComment!): Comment!
+  deleteComment(id: ID!): Boolean!
+
+  #like
+  putLike(blogID: ID!): Like!
+  putUnLike(blogID: ID!): Boolean!
+
+  #email
+  forgotPassword(email: String!): Boolean!
+  resetPassword(resetToken: String!, input: ResetPassword!): AuthResponse!
+}
+
+# ========== PageNation ==========
+interface Connection {
+  # ページに関する情報
+  pageInfo: PageInfo!
+  # Edgeの集まり
+  edges: [Edge!]!
+  # 合計Node
+  totalCount: Int
+  # 合計Page
+  totalPage: Int
+}
+
+type PageInfo {
+  # 次ページ（存在するかどうか）
+  hasNextPage: Boolean!
+  # 前ページ（存在するかどうか）
+  hasPreviousPage: Boolean!
+  # 当該ページの１レコード目（Blogの1件目の位置情報）
+  startCursor: Cursor!
+  # 当該ページの最終レコード（Blogの最後の位置情報）
+  endCursor: Cursor!
+}
+
+# 1件分のデータ
+interface Edge {
+  # データ
+  node: Node
+  # 位置情報
+  cursor: Cursor!
+}
+
+input PageCondition {
+  # 前ページ遷移条件
+  backward: BackwardPagination
+  # 次ページ遷移条件
+  forward: FowardPagination
+  # 現在ページ番号
+  nowPageNo: Int!
+  # 1ページ表示件数
+  initialLimit: Int
+}
+
+# 前ページ遷移条件
+input BackwardPagination {
+  # 取得件数（何件分のデータを取得するか）
+  last: Int!
+  # 取得対象識別用カーソル（今いるページのスタートのNodeの位置情報,（2ページ目以降に取得できる））
+  before: Cursor
+}
+
+# 次ページ遷移条件
+input FowardPagination {
+  # 取得件数（何件分のデータを取得するか）
+  first: Int!
+  # 取得対象識別用カーソル（前ページのラストのNodeの位置情報,（2ページ目以降に取得できる））
+  after: Cursor
+}
+
+interface Node {
+  id: ID!
+}
+
+# 文字列フィルタ条件
+input TextFilterCondition {
+  #フィルタ文字列
+  filterWord: String!
+  # マッチングパターン（※オプション。指定無しの場合は「部分一致」となる。）
+  matchingPattern: MatchingPattern = PARTIAL_MATCH
+}
+
+# どれかを返却
+enum MatchingPattern {
+  # 部分一致
+  PARTIAL_MATCH
+  # 完全一致
+  EXACT_MATCH
+}
+
+type BlogConnection implements Connection {
+  # ページ情報
+  pageInfo: PageInfo!
+  # 検索結果一覧（※カーソル情報を含む）
+  edges: [BlogEdge!]!
+  # 検索結果の全件数
+  totalCount: Int!
+  # 合計Page
+  totalPage: Int!
+}
+
+# 検索結果一覧（※カーソル情報を含む）
+type BlogEdge implements Edge {
+  node: Blog
+  cursor: Cursor!
+}
+
+# 並び替え条件
+input EdgeOrder {
+  direction: OrderDirection!
+}
+
+# 並び替え方向
+enum OrderDirection {
+  # 昇順
+  ASC
+  # 降順
+  DESC
+}

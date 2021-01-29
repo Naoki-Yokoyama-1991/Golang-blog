@@ -1,0 +1,8 @@
+# Write your query or mutation here
+query getAllUser {
+  userAll {
+    firstName
+    lastName
+    email
+  }
+}

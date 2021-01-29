@@ -1,0 +1,13 @@
+query getCategoryBlogs($categoryID: ID!) {
+  categoriesList(categoryID: $categoryID) {
+    title
+    text
+    id
+    likeCount
+    __typename
+    user {
+      firstName
+      __typename
+    }
+  }
+}

@@ -1,0 +1,15 @@
+mutation createComment($blogID: ID!, $comment: String!) {
+  createComment(blogID: $blogID, input: { comment: $comment }) {
+    __typename
+    id
+    comment
+    createdAt
+    user {
+      firstName
+    }
+    blog {
+      id
+      title
+    }
+  }
+}

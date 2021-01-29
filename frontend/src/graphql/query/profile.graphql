@@ -1,0 +1,21 @@
+query getProfile {
+  userProfile {
+    __typename
+    id
+    email
+    lastName
+    firstName
+    role
+    active
+    blogs {
+      __typename
+      id
+      text
+      title
+    }
+    likes {
+      __typename
+      id
+    }
+  }
+}

@@ -1,0 +1,39 @@
+query getPagnation(
+  $pageCondition: PageCondition
+  $edgeOrder: EdgeOrder
+  $filterWord: TextFilterCondition
+) {
+  blogConnection(
+    pageCondition: $pageCondition
+    edgeOrder: $edgeOrder
+    filterWord: $filterWord
+  ) {
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+    edges {
+      node {
+        id
+        title
+        text
+        updatedAt
+        likeCount
+        createdAt
+        user {
+          updatedAt
+          createdAt
+          firstName
+          id
+          lastName
+          email
+        }
+      }
+      cursor
+    }
+    totalCount
+    totalPage
+  }
+}

@@ -1,0 +1,6 @@
+mutation createLike($blogID: ID!) {
+  putLike(blogID: $blogID) {
+    __typename
+    id
+  }
+}

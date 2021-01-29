@@ -1,0 +1,28 @@
+mutation updateBlog(
+  $id: ID!
+  $title: String!
+  $text: String!
+  $categoryId: String!
+  $image: Upload!
+) {
+  updateBlog(
+    id: $id
+    input: {
+      title: $title
+      text: $text
+      categoryId: $categoryId
+      image: $image
+    }
+  ) {
+    id
+    title
+    text
+    imageURL
+    category {
+      id
+    }
+    user {
+      id
+    }
+  }
+}

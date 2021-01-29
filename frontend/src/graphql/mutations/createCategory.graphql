@@ -1,0 +1,9 @@
+mutation createCategory($name: String!) {
+  createCategory(input: { name: $name }) {
+    id
+    name
+    blogs {
+      id
+    }
+  }
+}
